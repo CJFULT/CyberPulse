@@ -69,7 +69,7 @@ def discover_and_scrape(max_articles_per_feed=5):
                 domain = urlparse(link).netloc.lower()
                 force_selenium = any(d in domain for d in SELENIUM_REQUIRED_DOMAINS)
 
-                content, _ = scrape_article_content(
+                content = scrape_article_content(
                     link, 
                     chrome_driver=chrome_driver, 
                     force_selenium_for_this_url=force_selenium
