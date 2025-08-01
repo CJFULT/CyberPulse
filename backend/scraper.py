@@ -50,28 +50,20 @@ def get_random_user_agent():
     return random.choice(USER_AGENTS)
 
 def initialize_chrome_driver():
-    """Initializes and returns a headless Chrome WebDriver instance."""
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--disable-blink-features=AutomationControlled')
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    options.add_experimental_option('useAutomationExtension', False)
-    options.add_argument(f'user-agent={get_random_user_agent()}')
-    options.add_argument('--log-level=3') # Suppress verbose logging from Chrome
-    options.add_argument('--disable-gpu')
-    options.add_argument('--incognito') # Use incognito mode to clear cookies/cache
-    
+    """Initializes a Selenium Chrome WebDriver for running in a server environment."""
+    from selenium.webdriver.chrome.options import Options
+
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")  # MUST run without a GUI in a server
+    chrome_options.add_argument("--no-sandbox")  # Required for running as root in Docker/Linux
+    chrome_options.add_argument("--disable-dev-shm-usage") # Overcomes limited resource problems
+
     try:
-        service = Service(CHROMEDRIVER_PATH)
-        driver = webdriver.Chrome(service=service, options=options)
-        # Execute script to remove webdriver property
-        driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-        logger.info("Chrome WebDriver initialized.")
+        # When browser-actions/setup-chrome is used, the driver is automatically in the system's PATH
+        driver = webdriver.Chrome(options=chrome_options)
         return driver
-    except WebDriverException as e:
-        logger.error(f"Failed to initialize Chrome WebDriver: {e}. Check if chromedriver.exe path is correct and Chrome browser is installed.")
+    except Exception as e:
+        print(f"Failed to initialize Chrome WebDriver: {e}")
         return None
 
 def scrape_article_content(url, chrome_driver=None, force_selenium_for_this_url=False, timeout=20, max_retries=3, delay_range=(1, 5)):
