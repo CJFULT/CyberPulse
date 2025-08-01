@@ -1,0 +1,9 @@
+# Environment variables - KEEP THESE SECRET
+.env
+
+# Local database data
+backend/chroma_db_data/
+
+# Python cache files
+__pycache__/
+*.pyc
