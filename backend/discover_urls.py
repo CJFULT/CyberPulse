@@ -24,6 +24,7 @@ CYBERSECURITY_RSS_FEEDS = [
     "https://www.securityweek.com/feed",
     "https://www.bleepingcomputer.com/feed/",
     "https://darkreading.com/rss.xml",
+    "https://feeds.feedburner.com/TheHackersNews",
 ]
 
 SELENIUM_REQUIRED_DOMAINS = [
