@@ -130,7 +130,7 @@ def generate_pulses(min_articles_for_pulse=3):
 
             # --- NEW: Insert the new pulse into Supabase ---
             pulse_response = supabase.table('pulses').insert({
-                'title': f"Weekly {category_name} Pulse: {title.strip()}",
+                'title': f"{title.strip()}",
                 'blurb': blurb.strip(),
                 'content': content.strip(),
                 'category_id': category_id

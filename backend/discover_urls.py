@@ -21,10 +21,18 @@ supabase: Client = create_client(supabase_url, supabase_key)
 # --- End of Initialization ---
 
 CYBERSECURITY_RSS_FEEDS = [
+    "https://feeds.feedburner.com/TheHackersNews",
+    "https://krebsonsecurity.com/feed/",
     "https://www.securityweek.com/feed",
     "https://www.bleepingcomputer.com/feed/",
     "https://darkreading.com/rss.xml",
-    "https://feeds.feedburner.com/TheHackersNews",
+    "https://dailydarkweb.net/feed/",
+    "https://www.cio.com/news/feed/",
+    "https://www.csoonline.com/feed/",
+    "https://hackread.com/feed/",
+    "https://cyble.com/feed/",
+    "https://www.itsecurityguru.org/feed/",
+    "https://searchsecurity.techtarget.com/rss/Security-Wire-Daily-News.xml",
 ]
 
 SELENIUM_REQUIRED_DOMAINS = [
