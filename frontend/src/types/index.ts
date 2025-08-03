@@ -1,5 +1,6 @@
 export interface Article {
   id: string;
+  slug: string;
   title: string;
   content: string;
   url: string;
@@ -26,4 +27,17 @@ export interface RSSFeed {
   url: string;
   name: string;
   active: boolean;
+}
+
+export interface Pulse {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  categoryColor: string;
+  categoryGradient: string;
+  createdAt: string;
+  blurb: string;
+  content: string;
+  views: number;
 }

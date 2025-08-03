@@ -28,6 +28,12 @@ if not gemini_api_key:
 genai.configure(api_key=gemini_api_key)
 # --- End of Initialization ---
 
+def slugify(text):
+    """Converts a string into a URL-friendly slug."""
+    text = text.lower().strip()
+    text = re.sub(r'[\s\W-]+', '-', text) # Replace spaces and non-word chars with a hyphen
+    return text.strip('-')
+
 
 def generate_pulses(min_articles_for_pulse=3):
     """Generates weekly pulses for categories based on newly categorized articles."""
@@ -128,12 +134,15 @@ def generate_pulses(min_articles_for_pulse=3):
 
             title, blurb, content = match.groups()
 
+            pulse_slug = slugify(title)
+
             # --- NEW: Insert the new pulse into Supabase ---
             pulse_response = supabase.table('pulses').insert({
                 'title': f"{title.strip()}",
                 'blurb': blurb.strip(),
                 'content': content.strip(),
-                'category_id': category_id
+                'category_id': category_id,
+                'slug': pulse_slug
             }).execute()
             
             new_pulse_id = pulse_response.data[0]['id']

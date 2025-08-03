@@ -16,7 +16,7 @@ const MOCK_TOTAL_VIEWS = 125000; // We can replace this later
 function App() {
   // State for holding live data
   const [categories, setCategories] = useState<Category[]>([]);
-  const [stats, setStats] = useState({ totalArticles: 0, totalViews: MOCK_TOTAL_VIEWS, totalCategories: 0 });
+  const [stats, setStats] = useState({ totalArticles: 0, totalViews: 0, totalCategories: 0 });
   const [loading, setLoading] = useState(true);
 
   // State for UI interaction (from your original file)
@@ -59,7 +59,7 @@ function App() {
         setStats({ 
           totalArticles: result.total_articles, 
           totalCategories: result.total_categories,
-          totalViews: MOCK_TOTAL_VIEWS // Use placeholder for now
+          totalViews: result.total_views || 0 // Use placeholder for now
         });
       }
 
