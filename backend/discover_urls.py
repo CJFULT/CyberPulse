@@ -26,12 +26,12 @@ CYBERSECURITY_RSS_FEEDS = [
     "https://www.securityweek.com/feed",
     "https://www.bleepingcomputer.com/feed/",
     "https://darkreading.com/rss.xml",
-    "https://dailydarkweb.net/feed/",
+    "https://dailydarkweb.net/feed/", # did not work
     "https://www.cio.com/news/feed/",
     "https://www.csoonline.com/feed/",
     "https://hackread.com/feed/",
     "https://cyble.com/feed/",
-    "https://www.itsecurityguru.org/feed/",
+    "https://www.itsecurityguru.org/feed/", # did not work
     "https://searchsecurity.techtarget.com/rss/Security-Wire-Daily-News.xml",
 ]
 
@@ -40,7 +40,7 @@ SELENIUM_REQUIRED_DOMAINS = [
     'darkreading.com',
 ]
 
-def discover_and_scrape(max_articles_per_feed=5):
+def discover_and_scrape(max_articles_per_feed=20):
     """
     Discovers new URLs from RSS feeds, scrapes them, and stores in Supabase.
     """

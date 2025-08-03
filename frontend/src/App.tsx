@@ -7,6 +7,8 @@ import { PulseAnimation } from './components/PulseAnimation';
 import HomePage from './pages/HomePage'; // Import the renamed HomePage
 import PulseFeedPage from './pages/PulseFeedPage'; 
 import LoginPage from './pages/LoginPage';
+import AccountPage from './pages/AccountPage';
+import ProtectedRoute from './ProtectedRoute';
 
 function App() {
   const { session } = useAuth(); // <-- Get the current session
@@ -29,7 +31,7 @@ function App() {
 
         {session ? (
           <div className="flex items-center space-x-4">
-            <span className="text-gray-300">{session.user.email}</span>
+            <Link to="/account" className="text-lg hover:text-cyan-400 transition-colors">Account</Link>
             <button 
               onClick={handleLogout} 
               className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition-colors"
@@ -47,6 +49,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/pulses" element={<PulseFeedPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/account" element={<ProtectedRoute><AccountPage /></ProtectedRoute>}/>
       </Routes>
 
        <footer className="relative z-10 border-t border-gray-800 mt-16">
