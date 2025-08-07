@@ -1,0 +1,15 @@
+https://feeds.feedburner.com/TheHackersNews
+https://krebsonsecurity.com/
+https://www.securityweek.com/feed
+https://cyble.com/feed/
+https://www.itsecurityguru.org/feed/
+https://searchsecurity.techtarget.com/rss/Security-Wire-Daily-News.xml
+https://www.schneier.com/feed/
+https://www.wired.com/feed/category/security/latest/rss
+https://feeds.arstechnica.com/arstechnica/technology-lab
+https://techcrunch.com/feed/
+https://ainowinstitute.org/feed
+https://cdt.org/area-of-focus/ai-policy-governance/feed/
+https://cdt.org/area-of-focus/cybersecurity-standards/feed/
+https://www.cisa.gov/
+https://www.nist.gov/blogs/cybersecurity-insights/rss.xml
