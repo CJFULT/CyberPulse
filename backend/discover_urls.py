@@ -56,7 +56,7 @@ FULL_CONTENT_ALLOWED_DOMAINS = [
     # Add any other government or open-licensed domains here
 ]
 
-def discover_and_scrape(max_articles_per_feed=10):
+def discover_and_scrape(max_articles_per_feed=30):
     """
     Discovers URLs, scrapes them, and either analyzes for excerpts or stores
     the full content based on a domain whitelist.
