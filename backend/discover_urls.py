@@ -21,22 +21,25 @@ supabase: Client = create_client(supabase_url, supabase_key)
 # --- End of Initialization ---
 
 CYBERSECURITY_RSS_FEEDS = [
-    "https://feeds.feedburner.com/TheHackersNews",
-    "https://krebsonsecurity.com/feed/",
-    "https://www.securityweek.com/feed",
-    "https://cyble.com/feed/",
-    "https://www.itsecurityguru.org/feed/",
-    "https://searchsecurity.techtarget.com/rss/Security-Wire-Daily-News.xml",
-    "https://www.schneier.com/feed/",
-    "https://www.wired.com/feed/category/security/latest/rss",
-    "https://feeds.arstechnica.com/arstechnica/technology-lab",
-    "https://techcrunch.com/feed/",
-    "https://ainowinstitute.org/feed",
-    "https://cdt.org/area-of-focus/ai-policy-governance/feed/",
-    "https://cdt.org/area-of-focus/cybersecurity-standards/feed/",
-    "https://www.cisa.gov/news-events/cybersecurity-advisories/rss",
-    "https://www.nist.gov/blogs/cybersecurity-insights/rss.xml",
-    "https://www.silicon.co.uk/news/e-innovation/artificial-intelligence/feed",
+    # "https://feeds.feedburner.com/TheHackersNews",
+    # "https://krebsonsecurity.com/feed/",
+    # "https://www.securityweek.com/feed",
+    # "https://cyble.com/feed/",
+    # "https://www.itsecurityguru.org/feed/",
+    # "https://searchsecurity.techtarget.com/rss/Security-Wire-Daily-News.xml",
+    # "https://www.schneier.com/feed/",
+    # "https://www.wired.com/feed/category/security/latest/rss",
+    # "https://feeds.arstechnica.com/arstechnica/technology-lab",
+    # "https://techcrunch.com/feed/",
+    # "https://ainowinstitute.org/feed",
+    # "https://cdt.org/area-of-focus/ai-policy-governance/feed/",
+    # "https://cdt.org/area-of-focus/cybersecurity-standards/feed/",
+    # "https://www.cisa.gov/news-events/cybersecurity-advisories/rss",
+    # "https://www.nist.gov/blogs/cybersecurity-insights/rss.xml",
+    # "https://www.silicon.co.uk/news/e-innovation/artificial-intelligence/feed",
+    # "https://securityaffairs.com/feed",
+    # "https://gbhackers.com/feed/",
+    "https://www.helpnetsecurity.com/feed/",
 ]
 
 SELENIUM_REQUIRED_DOMAINS = [
@@ -56,7 +59,7 @@ FULL_CONTENT_ALLOWED_DOMAINS = [
     # Add any other government or open-licensed domains here
 ]
 
-def discover_and_scrape(max_articles_per_feed=10):
+def discover_and_scrape(max_articles_per_feed=5):
     """
     Discovers URLs, scrapes them, and either analyzes for excerpts or stores
     the full content based on a domain whitelist.

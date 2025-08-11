@@ -1,65 +1,82 @@
-// frontend/src/App.tsx
+// frontend/src/pages/HomePage.tsx
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { supabase } from '../supabaseClient'; // Our Supabase client
+import { supabase } from '../supabaseClient';
 import { ParticleBackground } from '../components/ParticleBackground';
 import { Header } from '../components/Header';
 import { CategoryCard } from '../components/CategoryCard';
 import { ArticleModal } from '../components/ArticleModal';
 import { StatsBar } from '../components/StatsBar';
 import { PulseAnimation } from '../components/PulseAnimation';
-import { Category } from '../types'; // Assuming this type is defined correctly
+import { Category } from '../types';
 
-// Define a placeholder for totalViews, as this isn't in our schema yet
-const MOCK_TOTAL_VIEWS = 125000; // We can replace this later
-
-function App() {
-  // State for holding live data
+function HomePage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [stats, setStats] = useState({ totalArticles: 0, totalViews: 0, totalCategories: 0 });
   const [loading, setLoading] = useState(true);
-
-  // State for UI interaction (from your original file)
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showMenu, setShowMenu] = useState(false);
 
-  // useEffect to fetch data when the app loads
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
 
-      // Fetch categories and their nested articles simultaneously with stats
       const [categoryPromise, statsPromise] = await Promise.all([
         supabase
-          .from('categories')
-          .select(`
-            *,
-            articles ( id, title, url )
-          `),
-        supabase.rpc('get_dashboard_stats') // Calling our new database function
+          .from('categories_with_latest_article')
+          .select(`*`)
+          .order('latest_article_date', { ascending: false }),
+        supabase.rpc('get_dashboard_stats')
       ]);
 
       if (categoryPromise.error) console.error('Error fetching categories:', categoryPromise.error);
       if (statsPromise.error) console.error('Error fetching stats:', statsPromise.error);
 
       if (categoryPromise.data) {
-        // The data needs to match the 'Category' type, including 'description' and 'totalViews'
-        const formattedCategories = categoryPromise.data.map(cat => ({
-          ...cat,
-          description: cat.description || `Insights and updates on ${cat.name}.`, // Add placeholder
-          totalViews: cat.totalViews || 0, // Add placeholder
-          articles: cat.articles || [],
-        }));
+        // --- CHECKPOINT 1: Log the raw data from Supabase ---
+        // console.log("Checkpoint 1: Raw data from Supabase", categoryPromise.data);
+
+        const formattedCategories = categoryPromise.data.map(cat => {
+          const articles = (cat.articles || []).map(art => ({
+            id: art.id,
+            title: art.title,
+            url: art.url,
+            publishedAt: art.scraped_date,
+            views: art.view_count,
+            content: '', 
+            source: new URL(art.url).hostname,
+            category: cat.name,
+            excerpt: '',
+          }));
+          
+          // --- CHECKPOINT 2: Log each category as it's being formatted ---
+          // console.log(`Checkpoint 2: Formatting category "${cat.name}". Found ${articles.length} articles.`);
+
+          return {
+            id: cat.id,
+            name: cat.name,
+            description: cat.description || `Insights and updates on ${cat.name}.`,
+            color: cat.color,
+            gradient: cat.gradient,
+            summary: `An AI-generated summary of the latest trends and articles related to ${cat.name}.`,
+            totalViews: articles.reduce((sum, art) => sum + (art.views || 0), 0),
+            articles: articles,
+          };
+        });
+
+        // --- CHECKPOINT 3: Log the final data being set to state ---
+        // console.log("Checkpoint 3: Final data being set", formattedCategories);
+        
         setCategories(formattedCategories as unknown as Category[]);
       }
 
       if (statsPromise.data) {
         const result = statsPromise.data[0];
         setStats({ 
-          totalArticles: result.total_articles, 
-          totalCategories: result.total_categories,
-          totalViews: result.total_views || 0 // Use placeholder for now
+          totalArticles: result.total_articles || 0, 
+          totalCategories: result.total_categories || 0,
+          totalViews: result.total_views || 0,
         });
       }
 
@@ -69,7 +86,6 @@ function App() {
     fetchData();
   }, []);
 
-  // Your original search logic, now running on live data!
   const filteredCategories = useMemo(() => {
     if (!searchQuery) return categories;
     return categories.filter(category =>
@@ -81,12 +97,8 @@ function App() {
     );
   }, [searchQuery, categories]);
 
-  // The rest of your component remains the same, using the new live data states
   return (
-    <div className="min-h-screen text-white overflow-x-hidden">
-      <ParticleBackground />
-      <PulseAnimation />
-      
+    <>
       <Header
         onMenuClick={() => setShowMenu(!showMenu)}
         searchQuery={searchQuery}
@@ -140,12 +152,8 @@ function App() {
         category={selectedCategory}
         onClose={() => setSelectedCategory(null)}
       />
-
-      <footer className="relative z-10 border-t border-gray-800 mt-16">
-        {/* Your original footer JSX */}
-      </footer>
-    </div>
+    </>
   );
 }
 
-export default App;
+export default HomePage;

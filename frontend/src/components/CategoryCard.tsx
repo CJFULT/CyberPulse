@@ -1,6 +1,15 @@
 import React from 'react';
-import { Eye, ExternalLink, TrendingUp } from 'lucide-react';
+import { Shield, Bug, Server, Users, BarChart, Eye, ExternalLink, TrendingUp } from 'lucide-react';
 import { Category } from '../types';
+
+// --- ADD 'export' TO THIS LINE ---
+export const categoryIcons: { [key: string]: React.ElementType } = {
+  "Ransomware": Shield,
+  "Data Breaches & Leaks": Bug,
+  "Cloud Security Incidents": Server,
+  // ... add all your other category-to-icon mappings here
+  "Default": BarChart, 
+};
 
 interface CategoryCardProps {
   category: Category;

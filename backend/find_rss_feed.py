@@ -181,7 +181,7 @@ def test_cybersecurity_sites():
     """Test the RSS discovery on cybersecurity websites"""
     
     test_sites = [
-        'https://www.adalovelaceinstitute.org/',
+        'https://www.theregister.com/',
     ]
     
     finder = RSSFeedDiscovery()
