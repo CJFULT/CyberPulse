@@ -39,7 +39,7 @@ def generate_pulses(min_articles_for_pulse=3):
     """Generates weekly pulses for categories based on newly categorized articles."""
     print('Starting weekly pulse generation...')
     
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     pulses_collection = get_or_create_collection(PULSES_COLLECTION)
 
     # --- NEW: Fetch recent articles and their categories ---
