@@ -1,4 +1,4 @@
-# backend/generate_weekly_pulses.py
+# backend/generate_daily_pulses.py
 
 import os
 import re
@@ -36,8 +36,8 @@ def slugify(text):
 
 
 def generate_pulses(min_articles_for_pulse=3):
-    """Generates weekly pulses for categories based on newly categorized articles."""
-    print('Starting weekly pulse generation...')
+    """Generates daily pulses for categories based on newly categorized articles."""
+    print('Starting daily pulse generation...')
     
     model = genai.GenerativeModel('gemini-2.5-flash')
     pulses_collection = get_or_create_collection(PULSES_COLLECTION)
@@ -94,7 +94,7 @@ def generate_pulses(min_articles_for_pulse=3):
 
         # --- The prompt for the AI remains the same ---
         prompt = f"""
-        You are an **expert cybersecurity analyst** and a **dedicated educator** for a leading cybersecurity news platform. Your primary goal is to synthesize complex cybersecurity information into clear, actionable, and highly digestible weekly "Pulses" for a broad audience. This audience includes both cybersecurity professionals seeking concise updates and general users who need to understand critical threats and protective measures to make informed decisions in their personal and professional lives.
+        You are an **expert cybersecurity analyst** and a **dedicated educator** for a leading cybersecurity news platform. Your primary goal is to synthesize complex cybersecurity information into clear, actionable, and highly digestible daily "Pulses" for a broad audience. This audience includes both cybersecurity professionals seeking concise updates and general users who need to understand critical threats and protective measures to make informed decisions in their personal and professional lives.
 
         You must achieve the following:
         1.  **Comprehensive Understanding:** Analyze the provided new articles thoroughly, drawing out the most significant developments, evolving technologies, and strategic insights relevant to the specific category: **{category_name}**.
@@ -117,7 +117,7 @@ def generate_pulses(min_articles_for_pulse=3):
         --- NEW ARTICLES FOR {category_name.upper()} END ---
         {past_pulses_context}
 
-        TITLE: [A concise, impactful title (max 10 words) summarizing the most critical weekly update for {category_name}.]
+        TITLE: [A concise, impactful title (max 10 words) summarizing the most critical daily update for {category_name}.]
         BLURB: [A captivating summary (min 20 words, max 120 words) detailing the core points and immediate takeaways from this week's developments in {category_name}. Focus on what users need to know now.]
         CONTENT: [A detailed, accessible explanation (2-3 paragraphs, min 250 words, max 350 words) expanding on the key aspects, trends, and actionable insights for {category_name} this week. Clearly explain any complex concepts. Use double newlines to separate paragraphs.]
         """
@@ -174,7 +174,7 @@ def generate_pulses(min_articles_for_pulse=3):
             .execute()
     # --- End of New Section ---
 
-    print(f'\nFinished weekly pulse generation. Total pulses generated: {total_pulses_generated}.')
+    print(f'\nFinished daily pulse generation. Total pulses generated: {total_pulses_generated}.')
 
 
 if __name__ == "__main__":

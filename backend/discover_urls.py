@@ -40,6 +40,7 @@ CYBERSECURITY_RSS_FEEDS = [
     "https://securityaffairs.com/feed",
     "https://gbhackers.com/feed/",
     "https://www.helpnetsecurity.com/feed/",
+    "https://cybersecuritynews.com/feed/",
 ]
 
 SELENIUM_REQUIRED_DOMAINS = [
