@@ -40,10 +40,9 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ category, onClose })
             <IconComponent className="h-8 w-8 text-white" />
           </div>
           <div>
-            <h2 className={`text-3xl font-bold bg-gradient-to-r ${category.gradient} bg-clip-text text-transparent`}>
+            <h2 className={`text-3xl font-bold bg-gradient-to-r ${category.gradient} bg-clip-text`}>
               {category.name}
             </h2>
-            <p className="text-gray-400 mt-1">{category.description}</p>
           </div>
         </header>
         {/* --- END OF MODIFICATION --- */}

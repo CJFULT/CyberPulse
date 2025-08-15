@@ -34,15 +34,18 @@ def generate_weekly_pulse():
     today = datetime.now(timezone.utc)
     one_week_ago = today - timedelta(days=7)
 
-    response = supabase.table('pulses') \
-        .select('title, blurb, content, published_date') \
-        .gte('published_date', one_week_ago.isoformat()) \
-        .execute()
+    try:
+        response = supabase.table('pulses') \
+            .select('title, blurb, content, published_date') \
+            .gte('published_date', one_week_ago.isoformat()) \
+            .execute()
 
-    if response.error:
-        raise Exception(f"Error fetching daily pulses: {response.error.message}")
+        # The data is directly in the response object
+        daily_pulses = response.data
 
-    daily_pulses = response.data
+    except Exception as e:
+        raise Exception(f"Error fetching daily pulses: {e}")
+
     print(f"Found {len(daily_pulses)} daily pulses from the past week.")
 
     if len(daily_pulses) < MIN_PULSES_FOR_WEEKLY_SUMMARY:
@@ -69,6 +72,7 @@ def generate_weekly_pulse():
     2.  **Synthesize and Connect:** Explain how events connect. Did an early-week vulnerability lead to a late-week data breach? Did multiple reports point to the same threat actor?
     3.  **Provide Actionable Insight:** Conclude with a forward-looking "What to Watch For" section, providing actionable advice based on the week's trends.
     4.  **Adhere to the Output Format STRICTLY.** Do not include any text or pleasantries outside of this format.
+    5.  **Avoid redundant and Overused Topics and Actionable Instructions.** Refrain from advising users to use broad or commonly used prevention tactics. For example, things like using multifactor authentication, employee awareness training (in any field), least privilege, regular updates, data encryption, data backup, and any other general topics that are recommended on any and every security advisory.
 
     **Daily Pulse Data:**
     {structured_content}
@@ -90,14 +94,14 @@ def generate_weekly_pulse():
 
     title, blurb, content = (g.strip() for g in match.groups())
 
-    insert_response = supabase.table('weekly_pulses').insert({
-        'title': title,
-        'blurb': blurb,
-        'content': content
-    }).execute()
-
-    if insert_response.error:
-        raise Exception(f"Error inserting weekly pulse: {insert_response.error.message}")
+    try:
+        supabase.table('weekly_pulses').insert({
+            'title': title,
+            'blurb': blurb,
+            'content': content
+        }).execute()
+    except Exception as e:
+        raise Exception(f"Error inserting weekly pulse: {e}")
 
     print(f"Successfully generated and saved new weekly pulse: '{title}'")
 

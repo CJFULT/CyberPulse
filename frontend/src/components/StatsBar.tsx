@@ -1,3 +1,5 @@
+// frontend/src/components/StatsBar.tsx
+
 import React from 'react';
 import { TrendingUp, Users, Zap, Globe } from 'lucide-react';
 
@@ -8,12 +10,15 @@ interface StatsBarProps {
 }
 
 export const StatsBar: React.FC<StatsBarProps> = ({ totalArticles, totalViews, totalCategories }) => {
+  // --- ADD THIS SAFEGUARD ---
+  // Provide default values for each prop in case they are undefined during the first render.
   const stats = [
-    { icon: Globe, label: 'Articles', value: totalArticles.toLocaleString() },
-    { icon: Users, label: 'Total Views', value: totalViews.toLocaleString() },
-    { icon: TrendingUp, label: 'Categories', value: totalCategories.toString() },
-    { icon: Zap, label: 'Live Sources', value: '24' }
+    { icon: Globe, label: 'Articles', value: (totalArticles ?? 0).toLocaleString() },
+    { icon: Users, label: 'Total Views', value: (totalViews ?? 0).toLocaleString() },
+    { icon: TrendingUp, label: 'Categories', value: (totalCategories ?? 0).toString() },
+    { icon: Zap, label: 'Live Sources', value: '19' } // This one is hardcoded, so it's safe
   ];
+  // --- END OF SAFEGUARD ---
 
   return (
     <div className="relative z-10 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 backdrop-blur-lg border border-cyan-500/20 rounded-xl p-6 mb-8">
