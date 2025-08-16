@@ -31,7 +31,7 @@ function App() {
       {/* Simple Navigation for now */}
       <div className="relative z-10 flex flex-col min-h-screen">
         <nav className="relative z-20 flex justify-center space-x-6 p-4 bg-black bg-opacity-20">
-          <Link to="/home" className="text-lg hover:text-cyan-400 transition-colors">Home</Link>
+          <Link to="/" className="text-lg hover:text-cyan-400 transition-colors">Home</Link>
           <Link to="/categories" className="text-lg hover:text-cyan-400 transition-colors">Categories</Link>
           <Link to="/pulses" className="text-lg hover:text-cyan-400 transition-colors">Pulses</Link>
 
@@ -52,7 +52,7 @@ function App() {
         </nav>
 
         <Routes>
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/pulses" element={<PulsesPage />} />
           <Route path="/pulses/:slug" element={<PulseDetailPage />} />
