@@ -13,6 +13,10 @@ function PulsesPage() {
   useEffect(() => {
     const getPulses = async () => {
       setLoading(true);
+
+      const threeDaysAgo = new Date();
+      threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+
       const { data, error } = await supabase
         .from('pulses')
         .select(`
@@ -20,6 +24,7 @@ function PulsesPage() {
           slug,
           categories ( name, color, gradient )
         `)
+        .gte('published_date', threeDaysAgo.toISOString())
         .order('published_date', { ascending: false });
 
       if (error) {

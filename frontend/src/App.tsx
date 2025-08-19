@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage'; // Import the renamed HomePage
 import CategoriesPage from './pages/CategoriesPage'
 import PulsesPage from './pages/PulsesPage'; 
 import PulseDetailPage from './pages/PulseDetailPage';
+import WeeklyPulseDetailPage from './pages/WeeklyPulseDetailPage';
 import LoginPage from './pages/LoginPage';
 import AccountPage from './pages/AccountPage';
 import ProtectedRoute from './ProtectedRoute';
@@ -56,6 +57,7 @@ function App() {
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/pulses" element={<PulsesPage />} />
           <Route path="/pulses/:slug" element={<PulseDetailPage />} />
+          <Route path="/weekly_pulses/:slug" element={<WeeklyPulseDetailPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/account" element={<ProtectedRoute><AccountPage /></ProtectedRoute>}/>
         </Routes>

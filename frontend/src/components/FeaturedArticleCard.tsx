@@ -30,6 +30,8 @@ export const FeaturedArticleCard: React.FC<FeaturedArticleCardProps> = ({
         return 'from-orange-400 to-red-500';
       case 'blockchain':
         return 'from-purple-400 to-pink-500';
+      case 'Breaking':
+        return 'from-red-600 to-red-700';
       default:
         return 'from-gray-400 to-gray-600';
     }

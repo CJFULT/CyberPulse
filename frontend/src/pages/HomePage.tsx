@@ -169,13 +169,13 @@ function HomePage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-            <div className="md:translate-y-8">
+            <div className="md:translate-y-0">
               <FeaturedArticleCard 
                 article={featuredArticles[2]} 
-                size="medium"
+                size="large"
               />
             </div>
-            <div className="md:-translate-y-4">
+            <div className="md:-translate-y-21">
                <FeaturedArticleCard 
                 article={featuredArticles[3]} 
                 size="large"

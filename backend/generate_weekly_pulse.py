@@ -26,6 +26,12 @@ genai.configure(api_key=gemini_api_key)
 
 MIN_PULSES_FOR_WEEKLY_SUMMARY = 15
 
+def slugify(text):
+    """Converts a string into a URL-friendly slug."""
+    text = text.lower().strip()
+    text = re.sub(r'[\s\W-]+', '-', text)
+    return text.strip('-')
+
 def generate_weekly_pulse():
     """Generates a single weekly pulse by summarizing all daily pulses from the past week."""
     print("Starting weekly pulse generation...")
@@ -94,11 +100,14 @@ def generate_weekly_pulse():
 
     title, blurb, content = (g.strip() for g in match.groups())
 
+    pulse_slug = slugify(title)
+
     try:
         supabase.table('weekly_pulses').insert({
             'title': title,
             'blurb': blurb,
             'content': content
+            'slug': pulse_slug
         }).execute()
     except Exception as e:
         raise Exception(f"Error inserting weekly pulse: {e}")
