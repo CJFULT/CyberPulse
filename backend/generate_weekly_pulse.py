@@ -69,28 +69,61 @@ def generate_weekly_pulse():
     structured_content += "=== END OF WEEKLY PULSE DATA ==="
 
     # 3. AI-Powered Synthesis (The Prompt)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-pro')
     prompt = f"""
-    You are an executive-level cybersecurity analyst writing a weekly roundup for industry leaders. Your task is to analyze the following collection of daily cybersecurity pulse reports from the past week and synthesize them into a single, cohesive summary.
+    You are a senior Strategic Cybersecurity Intelligence Analyst preparing a weekly brief for an audience of CISOs, board members, and other senior leaders. Your mission is to distill raw daily intelligence into high-level, forward-looking strategic insights.
 
-    **Instructions:**
-    1.  **Identify Major Themes:** Read all the provided daily reports and identify the 3-5 most significant, overarching themes or trends. Do not simply list daily events.
-    2.  **Synthesize and Connect:** Explain how events connect. Did an early-week vulnerability lead to a late-week data breach? Did multiple reports point to the same threat actor?
-    3.  **Provide Actionable Insight:** Conclude with a forward-looking "What to Watch For" section, providing actionable advice based on the week's trends.
-    4.  **Adhere to the Output Format STRICTLY.** Do not include any text or pleasantries outside of this format.
-    5.  **Avoid redundant and Overused Topics and Actionable Instructions.** Refrain from advising users to use broad or commonly used prevention tactics. For example, things like using multifactor authentication, employee awareness training (in any field), least privilege, regular updates, data encryption, data backup, and any other general topics that are recommended on any and every security advisory.
+    Your goal is NOT to simply summarize the daily reports. It is to **synthesize** them by identifying underlying trends and performing **second-order thinking** to produce a cohesive strategic brief that provides unique, actionable value.
 
-    **Daily Pulse Data:**
+    **Core Directives:**
+
+    1.  **Identify Converging Trends:** Do not list individual events. Analyze the complete dataset to identify 2-4 significant, overarching trends. Consider questions like: Are disparate attacks targeting the same industry? Is a new TTP (Tactic, Technique, and Procedure) being used by multiple threat actors? Is there a subtle, underlying technological vulnerability connecting seemingly unrelated incidents?
+
+    2.  **Employ Second-Order Thinking:** Your primary value is to analyze the "so what?" factor. Move beyond direct cause-and-effect to explore the broader implications.
+        * **Poor, First-Order Thought:** "A vulnerability in library X was announced, and a patch was released."
+        * **Excellent, Second-Order Thought:** "The critical vulnerability in library X, which is embedded in thousands of enterprise products, highlights a systemic risk in software supply chains. This event suggests that procurement and risk management teams need to re-evaluate their dependency analysis, as patching is merely a reactive measure to a deeper, systemic issue."
+
+    3.  **Generate Novel, Actionable Intelligence:** Your final section must provide strategic, non-obvious guidance. Do not give generic advice.
+        * **STRICTLY FORBIDDEN ADVICE:** Anything related to common best practices, including but not limited to: multifactor authentication (MFA), general employee awareness training, principle of least privilege, prompt patching/updates, data encryption, data backups, password policies, or network segmentation. Your audience already knows this.
+        * **REQUIRED ACTIONABLE INTELLIGENCE:** Focus on strategic shifts. Advise on things like: re-prioritizing threat models based on new adversary TTPs, suggesting specific intelligence requirements for threat hunting teams, or recommending discussions with legal counsel about the implications of a new attack vector on regulatory compliance.
+
+    **Daily Intelligence Data:**
     {structured_content}
 
-    **Required Output Format:**
-    TITLE: [A concise, impactful title for the weekly cybersecurity roundup]
-    BLURB: [A 2-3 sentence executive summary of the week's most critical developments and what they mean.]
-    CONTENT: [A multi-paragraph analysis covering the major themes, how they evolved throughout the week, and a final "What to Watch For" section. Use double newlines to separate paragraphs.]
+    **Required Output Format (Strict Adherence Required):**
+
+    TITLE: [A concise, forward-looking title that captures the week's strategic narrative.]
+    BLURB: [A 2-3 sentence executive summary. Immediately state the most critical strategic takeaway for a time-constrained leader.]
+    CONTENT: [The full analysis. Use Markdown for subheadings as specified below. Use double newlines for paragraphs.]
+    **Key Intelligence Themes**
+
+    A brief introductory paragraph that sets the strategic tone for the week, framing the subsequent analysis.
+
+    **Theme 1: [Descriptive Title for the First Major Trend]**
+    A multi-paragraph analysis of the first major trend identified. Weave together events from different daily pulses to build your case. Focus on the "why" and the connections between events, not just the "what."
+
+    **Theme 2: [Descriptive Title for the Second Major Trend]**
+    A multi-paragraph analysis of the second major trend, following the same methodology as above. Connect disparate events and explain their collective significance.
+
+    *(Add additional themes as necessary, up to a maximum of four)*
+
+    **Strategic Outlook & Actionable Intelligence**
+
+    A concluding section that synthesizes the themes into a forward-looking perspective. Provide 2-3 specific, non-generic, and strategic recommendations for senior leadership based on the week's intelligence.
     """
 
+
+    generation_config = {
+        "temperature": 0.4,
+        "max_output_tokens": 8192, # Explicitly set a high limit for the response
+    }
+
+
     print("Sending content to Gemini for synthesis...")
-    response = model.generate_content(prompt)
+    response = model.generate_content(
+        prompt,
+        generation_config=generation_config,
+        )
     generated_text = response.text.strip()
 
     # 4. Storing the Weekly Pulse
@@ -106,8 +139,8 @@ def generate_weekly_pulse():
         supabase.table('weekly_pulses').insert({
             'title': title,
             'blurb': blurb,
-            'content': content
-            'slug': pulse_slug
+            'content': content,
+            'slug': pulse_slug,
         }).execute()
     except Exception as e:
         raise Exception(f"Error inserting weekly pulse: {e}")

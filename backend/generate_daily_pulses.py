@@ -39,7 +39,7 @@ def generate_pulses(min_articles_for_pulse=3):
     """Generates daily pulses for categories based on newly categorized articles."""
     print('Starting daily pulse generation...')
     
-    model = genai.GenerativeModel('gemini-2.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-pro')
     pulses_collection = get_or_create_collection(PULSES_COLLECTION)
 
     # --- NEW: Fetch recent articles and their categories ---
@@ -137,46 +137,26 @@ def generate_pulses(min_articles_for_pulse=3):
         {past_pulses_context}
         """
         
-        # f"""
-        # You are an **expert cybersecurity analyst** and a **dedicated educator** for a leading cybersecurity news platform. Your primary goal is to synthesize complex cybersecurity information into clear, actionable, and highly digestible daily "Pulses" for a broad audience. This audience includes both cybersecurity professionals seeking concise updates and general users who need to understand critical threats and protective measures to make informed decisions in their personal and professional lives.
-
-        # You must achieve the following:
-        # 1.  **Comprehensive Understanding:** Analyze the provided new articles thoroughly, drawing out the most significant developments, evolving technologies, and strategic insights relevant to the specific category: **{category_name}**.
-        # 2.  **Historical Context (if provided):** If "Relevant Past Pulses" are supplied, use them to:
-        #     * Establish a historical understanding of the topic's trajectory.
-        #     * Identify how current events represent continuations, accelerations, or new deviations from past trends.
-        #     * Highlight the outcomes of previously developing stories or security measures.
-        #     * Avoid repeating information extensively covered in very recent past pulses, focusing on *new* developments.
-        # 3.  **Actionable Intelligence:** Emphasize practical implications. What immediate risks should users be aware of? What preventive steps, good habits, or protective measures can they implement based on this information? How does this information impact their decision-making?
-        # 4.  **Simplicity and Digestibility:** Explain complex cybersecurity concepts, technologies, and strategies using **simple, everyday language that is easy to understand for anyone over the age of 10**, regardless of their technical background or native English proficiency. Avoid jargon wherever possible, or explain it clearly if unavoidable. The goal is deep retention and understanding.
-        # 5.  **Category Focus:** **CRITICALLY, ensure that the entire pulse content (Title, Blurb, and Content) remains laser-focused on the specific category: {category_name}.** Do NOT drift into broad cybersecurity goals or general threats. Every piece of information must directly pertain to this particular topic, its sub-trends, and actionable advice within its scope.
-        # 6.  **News Source Integrity:** Remember you are a news source. The information should be factual, derived directly from the provided articles and past pulses. Maintain an informative, authoritative, and helpful tone.
-
-        # **STRICTLY adhere to the following output format. Do NOT include any additional text, pleasantries, or explanations outside this format.**
-        # **IMPORTANT: Do NOT use any bolding (asterisks), italics, or any other markdown/special formatting in the output, EXCEPT for the colons after TITLE, BLURB, and CONTENT.**
-        # **Ensure the generated content is derived directly from the provided articles and, if provided, considers the context of past pulses.**
-        # ...
-        # --- NEW ARTICLES FOR {category_name.upper()} START ---
-        # {full_combined_text}
-        # --- NEW ARTICLES FOR {category_name.upper()} END ---
-        # {past_pulses_context}
-
-        # TITLE: [A concise, impactful title (max 10 words) summarizing the most critical daily update for {category_name}.]
-        # BLURB: [A captivating summary (min 20 words, max 120 words) detailing the core points and immediate takeaways from this week's developments in {category_name}. Focus on what users need to know now.]
-        # CONTENT: [A detailed, accessible explanation (2-3 paragraphs, min 250 words, max 350 words) expanding on the key aspects, trends, and actionable insights for {category_name} this week. Clearly explain any complex concepts. Use double newlines to separate paragraphs.]
-        # """
+        
         
         try:
             print(f'  Sending combined content for "{category_name}" to LLM...')
             response = model.generate_content(prompt)
             generated_text = response.text.strip()
             
-            match = re.search(r"TITLE:\s*(.*?)\s*BLURB:\s*(.*?)\s*CONTENT:\s*(.*)", generated_text, re.DOTALL | re.IGNORECASE)
+            match = re.search(
+                r"^\s*\**\s*TITLE\s*\**\s*:\s*(.*?)\s*\**\s*BLURB\s*\**\s*:\s*(.*?)\s*\**\s*CONTEXT\s*\**\s*:\s*(.*)",
+                generated_text,
+                re.DOTALL | re.IGNORECASE | re.MULTILINE
+            )
             if not match:
                 print(f"  ERROR: Failed to parse LLM output for {category_name}.")
+                print(f"  --- RAW LLM OUTPUT --- \n{generated_text}\n  --- END RAW LLM OUTPUT ---")
                 continue
 
-            title, blurb, content = match.groups()
+            title = match.group(1).lstrip(' *')
+            blurb = match.group(2).lstrip(' *')
+            content = match.group(3).lstrip(' *')
 
             pulse_slug = slugify(title)
 
