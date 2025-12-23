@@ -69,7 +69,7 @@ def generate_weekly_pulse():
     structured_content += "=== END OF WEEKLY PULSE DATA ==="
 
     # 3. AI-Powered Synthesis (The Prompt)
-    model = genai.GenerativeModel('gemini-2.5-pro')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     prompt = f"""
     You are a senior Strategic Cybersecurity Intelligence Analyst preparing a weekly brief for an audience of CISOs, board members, and other senior leaders. Your mission is to distill raw daily intelligence into high-level, forward-looking strategic insights.
 
